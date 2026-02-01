@@ -426,16 +426,3 @@ Esse foi um tour rápido pelos conceitos básicos do Linkerd. Há muito mais que
 - O Linkerd tem recursos multicluster poderosos e pode até estender o mesh para workloads fora do Kubernetes.
 
 <!-- @wait -->
-
-- O Buoyant Enterprise for Linkerd inclui o Buoyant Lifecycle Operator, que automatiza a instalação e gestão do Linkerd no cluster, além de recursos extras para tráfego entre zonas.
-
-<!-- @wait -->
-
-- O BEL também inclui ferramentas para geração de políticas.
-
-Para saber mais sobre tudo isso, acesse https://buoyant.io/sma!
-
-Por fim, feedbacks são sempre bem-vindos! Você pode me encontrar em flynn@buoyant.io ou como @flynn no Slack do Linkerd (https://slack.linkerd.io).
-
-<!-- @wait -->
-<!-- @show_slides -->
