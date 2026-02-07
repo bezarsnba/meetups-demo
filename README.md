@@ -1,10 +1,10 @@
-# Service Mesh Labs
+# Meetups Demos
 
-Este repositório contém demonstrações práticas e exemplos de tecnologias de Service Mesh, servindo de material de apoio para palestras e apresentações realizadas em meetups.
+Este repositório contém demonstrações práticas e exemplos de talks feitas e servindo de material de apoio para palestras e apresentações realizadas em meetups.
 
 ## 🎯 Objetivo
 
-Fornecer código e cenários reais para auxiliar no entendimento de conceitos de malha de serviço (Service Mesh), como gerenciamento de tráfego, segurança e observabilidade.
+Fornecer código e cenários reais para auxiliar no entendimento durante minhas apresentações.
 
 ## 🛠️ Pré-requisitos
 
@@ -18,8 +18,8 @@ Para executar as demonstrações contidas neste repositório, geralmente você p
 
 1. **Clone o repositório:**
    ```bash
-   git clone https://github.com/SEU_USUARIO/service-mesh-labs.git
-   cd service-mesh-labs
+   git clone https://github.com/bezarsnba/meetups-demo.git
+   cd meetups-demo
    ```
 
 2. **Explore o conteúdo:**
