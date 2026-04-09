@@ -1,0 +1,60 @@
+---
+# Gateway API - Gateway Definition
+# Namespace único simplificado para apresentação
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: my-gateway
+  namespace: demo-app
+  labels:
+    app: my-gateway
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 8000
+      allowedRoutes:
+        namespaces:
+          from: All
+        kinds:
+          - kind: HTTPRoute
+
+---
+# ✅ MÉTODO MODERNO: Gateway API (HTTPRoute)
+#
+# Benefícios:
+# • CNCF oficial (v1.0 stable desde 2023)
+# • Sem annotations vendor-specific
+# • Features nativas: headers, query params, method matching
+# • Futuro garantido
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: podinfo-route
+  namespace: demo-app
+  labels:
+    app: podinfo
+spec:
+  # Referencia o Gateway (mesmo namespace)
+  parentRefs:
+    - name: my-gateway
+      namespace: demo-app
+  
+  # Host que esta rota responde
+  hostnames:
+    - app.localhost
+  
+  # Regras de roteamento (sem annotations!)
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      
+      # Backend service
+      backendRefs:
+        - name: podinfo
+          port: 80

@@ -1,0 +1,25 @@
+---
+# Helmfile para Ingress-Nginx
+# Controlador legado (alternativa ao Traefik)
+
+helmDefaults:
+  atomic: false
+  cleanupOnFail: false
+  wait: false
+  timeout: 600
+  historyMax: 3
+  force: false
+
+repositories:
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
+
+releases:
+  # Ingress-Nginx - Controlador tradicional
+  - name: ingress-nginx
+    namespace: ingress-nginx
+    createNamespace: true
+    chart: ingress-nginx/ingress-nginx
+    version: 4.15.1
+    values:
+      - values.yaml

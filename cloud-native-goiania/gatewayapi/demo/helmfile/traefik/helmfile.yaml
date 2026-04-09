@@ -1,0 +1,25 @@
+---
+# Helmfile para Traefik v3
+# Suporta: Ingress, Ingress-Nginx (migração), Gateway API
+
+helmDefaults:
+  atomic: false
+  cleanupOnFail: false
+  wait: false
+  timeout: 600
+  historyMax: 3
+  force: false
+
+repositories:
+  - name: traefik
+    url: https://helm.traefik.io/traefik
+
+releases:
+  # Traefik v3 - Ingress Controller com Gateway API
+  - name: traefik
+    namespace: traefik
+    createNamespace: true
+    chart: traefik/traefik
+    version: 39.0.7
+    values:
+      - values.yaml

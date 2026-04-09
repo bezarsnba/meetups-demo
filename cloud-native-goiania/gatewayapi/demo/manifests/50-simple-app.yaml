@@ -1,0 +1,58 @@
+---
+# 🎯 DEMO SIMPLIFICADO - 25 minutos
+#
+# 1 APP | 1 NAMESPACE | 2 MÉTODOS
+# ────────────────────────────────────
+
+# Namespace único para tudo
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-app
+  labels:
+    name: demo-app
+
+---
+# App único: Podinfo
+apiVersion: v1
+kind: Service
+metadata:
+  name: podinfo
+  namespace: demo-app
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 9898
+  selector:
+    app: podinfo
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: podinfo
+  namespace: demo-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: podinfo
+  template:
+    metadata:
+      labels:
+        app: podinfo
+    spec:
+      containers:
+        - name: podinfo
+          image: stefanprodan/podinfo:6.7.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9898
+          env:
+            - name: PODINFO_UI_TITLE
+              value: "Gateway API Demo"
+            - name: PODINFO_UI_MESSAGE
+              value: "Ingress vs HTTPRoute"
+            - name: PODINFO_UI_LOGO
+              value: "https://raw.githubusercontent.com/stefanprodan/podinfo/master/ui/src/assets/logo.svg"

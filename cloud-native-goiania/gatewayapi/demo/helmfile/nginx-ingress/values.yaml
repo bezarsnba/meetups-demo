@@ -1,0 +1,54 @@
+# Ingress-Nginx - Valores para Gateway API Demo
+# Controlador legado (compatibilidade com Ingress)
+
+controller:
+  # Tipo de serviço
+  service:
+    type: LoadBalancer
+    loadBalancerSourceRanges: []
+
+  # Réplicas
+  replicaCount: 1
+
+  # Classe do Ingress
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: false
+
+  # Métricas
+  metrics:
+    enabled: true
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "10254"
+
+  # Logs
+  config:
+    log-format-upstream: >
+      $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"
+    enable-real-ip: "true"
+
+  # Security
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 101
+
+  # Resources
+  resources:
+    requests:
+      cpu: 100m
+      memory: 50Mi
+    limits:
+      cpu: 500m
+      memory: 256Mi
+
+  # Admission Webhooks
+  admissionWebhooks:
+    enabled: false

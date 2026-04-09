@@ -1,0 +1,87 @@
+# Traefik v3 - Valores para Gateway API Demo
+# Suporta: Kubernetes Ingress, Ingress-Nginx, Gateway API
+
+deployment:
+  replicas: 1
+  kind: Deployment
+
+image:
+  repository: traefik
+  tag: v3.6.12
+
+# Serviço
+service:
+  type: LoadBalancer
+  spec:
+    loadBalancerSourceRanges: []
+
+# Ingressão do Dashboard
+ingressRoute:
+  dashboard:
+    enabled: true
+
+# Providers - suporte a múltiplos tipos de roteamento
+providers:
+  kubernetesIngressNginx:
+    enabled: true
+  # Kubernetes Ingress - compatibilidade tradicional
+  kubernetesIngress:
+    enabled: true
+    ingressClass: traefik
+    allowEmptyServices: true
+
+  # Gateway API - novo padrão CNCF
+  kubernetesGateway:
+    enabled: true
+
+# Portas / Entrypoints
+ports:
+  web:
+    port: 8000
+    expose:
+      default: true
+    exposedPort: 80
+
+  websecure:
+    port: 8443
+    expose:
+      default: true
+    exposedPort: 443
+
+# Logs
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true
+
+# Métricas
+metrics:
+  prometheus:
+    enabled: true
+    addEntryPointsLabels: true
+    addServicesLabels: true
+
+# Security
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 65532
+
+# Resources
+resources:
+  requests:
+    cpu: 100m
+    memory: 50Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+
+# Global
+global:
+  checknewversion: false
+  sendanonymoususage: false
