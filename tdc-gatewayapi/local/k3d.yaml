@@ -1,0 +1,26 @@
+# Cluster local para ensaiar a demo: k3d cluster create --config local/k3d.yaml
+#
+# Traefik desabilitado: ele ocuparia a porta 80 e tem controller próprio de
+# Gateway API, conflitando com o Envoy Gateway.
+#
+# servicelb (klipper) desabilitado: ele expõe cada Service LoadBalancer via
+# hostPort em TODOS os nós. Como este repo sobe dois LoadBalancer na porta 80
+# (ingress-nginx e envoy-gateway), os dois competiriam pela mesma hostPort e
+# um travaria em Pending. MetalLB substitui o klipper (ver docs/local.md) e
+# aloca um IP virtual por Service via ARP/L2, sem bind de porta — replicando
+# o comportamento do GKE, onde cada Service ganha IP próprio.
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+metadata:
+  name: tdc-gatewayapi
+servers: 1
+agents: 2
+options:
+  k3s:
+    extraArgs:
+      - arg: --disable=traefik
+        nodeFilters:
+          - server:*
+      - arg: --disable=servicelb
+        nodeFilters:
+          - server:*

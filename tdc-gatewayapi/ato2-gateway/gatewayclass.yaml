@@ -1,0 +1,8 @@
+# Papel 1/3 — GatewayClass: o PROVEDOR declara qual controller implementa a API.
+# Trocar de implementação = trocar esta referência; Gateways e HTTPRoutes não mudam.
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoy
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller

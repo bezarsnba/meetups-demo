@@ -1,0 +1,25 @@
+# ATO 1 — canary no Ingress: um SEGUNDO Ingress disputando a mesma rota,
+# controlado inteiramente por annotations que só o nginx entende.
+# Nada disso é validado pela API do Kubernetes: um typo em "canary-weight"
+# é silenciosamente ignorado.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: podinfo-canary
+  namespace: apps
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/canary: "true"
+    nginx.ingress.kubernetes.io/canary-weight: "10"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: podinfo-v2
+                port:
+                  number: 9898

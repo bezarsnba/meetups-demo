@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: podinfo-v2
+  namespace: apps
+  labels:
+    app: podinfo
+    version: v2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: podinfo
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: podinfo
+        version: v2
+    spec:
+      containers:
+        - name: podinfo
+          image: ghcr.io/stefanprodan/podinfo:6.7.1
+          ports:
+            - name: http
+              containerPort: 9898
+          env:
+            - name: PODINFO_UI_COLOR
+              value: "#16a34a" # verde — o canary precisa saltar aos olhos
+            - name: PODINFO_UI_MESSAGE
+              value: "v2 — canary 🐤"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: podinfo-v2
+  namespace: apps
+  labels:
+    app: podinfo
+    version: v2
+spec:
+  selector:
+    app: podinfo
+    version: v2
+  ports:
+    - name: http
+      port: 9898
+      targetPort: http

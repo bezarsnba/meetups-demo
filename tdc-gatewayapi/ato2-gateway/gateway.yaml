@@ -1,0 +1,19 @@
+# Papel 2/3 — Gateway: o PLATFORM TEAM define listeners, TLS e quem pode se conectar.
+# No GKE, o Envoy Gateway cria um Service LoadBalancer → IP público automático.
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: demo-gateway
+  namespace: infra
+spec:
+  gatewayClassName: envoy
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              team: dev-team # governança: só namespaces do dev-team plugam rotas aqui

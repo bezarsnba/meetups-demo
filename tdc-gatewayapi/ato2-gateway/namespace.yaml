@@ -1,0 +1,7 @@
+# Namespace do PLATFORM TEAM — aqui vive o Gateway.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: infra
+  labels:
+    team: platform-team

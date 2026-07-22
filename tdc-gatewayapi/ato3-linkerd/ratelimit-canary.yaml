@@ -1,0 +1,33 @@
+# Protege o canary (podinfo-v2) enquanto ele ainda não foi validado — um pico
+# de tráfego não deve derrubar a versão nova. Diferencial do Linkerd: o limite
+# por "identity" é por identidade mTLS do chamador (workload real), não por IP
+# — não quebra atrás de LB/NAT como rate limit tradicional.
+apiVersion: policy.linkerd.io/v1beta3
+kind: Server
+metadata:
+  name: podinfo-v2
+  namespace: apps
+spec:
+  podSelector:
+    matchLabels:
+      app: podinfo
+      version: v2
+  port: http
+  # Sem isso, o Server sozinho já muda o default pra deny — mantém o
+  # comportamento aberto de antes, só adicionando o rate limit por cima.
+  accessPolicy: all-unauthenticated
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: HTTPLocalRateLimitPolicy
+metadata:
+  name: podinfo-v2-rate-limit
+  namespace: apps
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: podinfo-v2
+  total:
+    requestsPerSecond: 5
+  identity:
+    requestsPerSecond: 3
