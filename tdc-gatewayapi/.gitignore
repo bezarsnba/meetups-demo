@@ -1,0 +1,10 @@
+# Certificados do Linkerd (gerados com step-cli)
+*.key
+*.crt
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform.lock.hcl
