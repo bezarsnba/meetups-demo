@@ -1,0 +1,26 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: add-mandatory-labels
+  annotations:
+    policies.kyverno.io/title: Add Mandatory Labels
+    policies.kyverno.io/category: Best Practices
+    policies.kyverno.io/severity: low
+    policies.kyverno.io/description: >-
+      Garante labels obrigatórias (team, environment) em todo Deployment,
+      preenchendo com um valor padrão quando ausentes — sem bloquear o deploy.
+spec:
+  background: false
+  rules:
+    - name: add-team-and-environment
+      match:
+        any:
+          - resources:
+              kinds:
+                - Deployment
+      mutate:
+        patchStrategicMerge:
+          metadata:
+            labels:
+              +(team): unassigned
+              +(environment): unassigned
