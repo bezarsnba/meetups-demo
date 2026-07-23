@@ -39,8 +39,11 @@ kubectl --context="$CTX" apply -n argocd --server-side --force-conflicts \
   -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl --context="$CTX" -n argocd rollout status deployment/argocd-server
 
-echo "==> Registrando a Application de demo no ArgoCD"
-kubectl --context="$CTX" apply -f "${REPO_ROOT}/gitops/argocd/application.yaml"
+echo "==> Subindo o remote git local de demo (sem depender do GitHub real)"
+"${REPO_ROOT}/scripts/setup-mock-git.sh"
+
+echo "==> Registrando a Application de demo no ArgoCD (fonte: remote git local)"
+kubectl --context="$CTX" apply -f "${REPO_ROOT}/gitops/argocd/application.local-mock.yaml"
 
 echo "==> Instalando Policy Reporter (dashboard de PolicyReport/ClusterPolicyReport)"
 helm repo add policy-reporter https://kyverno.github.io/policy-reporter >/dev/null

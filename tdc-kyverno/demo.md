@@ -106,9 +106,10 @@ kubectl delete namespace time-pagamentos
 
 ## Parte 4 — GitOps: as mesmas regras, agora via ArgoCD
 
-A `Application` do ArgoCD já está registrada e aponta pro diretório
-`gitops/apps/demo-app` deste repo, com auto-sync ligado. O manifest lá dentro
-usa `stefanprodan/podinfo:latest` de propósito.
+A `Application` do ArgoCD aponta pra um repositório git local de demo
+(`scripts/setup-mock-git.sh`, sem depender de internet nem do GitHub real —
+o commit/push a seguir são reais, o ArgoCD reage de verdade). O manifest lá
+dentro usa `stefanprodan/podinfo:latest` de propósito.
 
 ```bash
 kubectl get application demo-app -n argocd
@@ -148,10 +149,12 @@ se alguém pular o teste.
 Corrigindo a fonte da verdade — no Git, não no cluster.
 
 ```bash
+cd local/git-mock-workdir
 sed -i 's/podinfo:latest/podinfo:6.6.2/' gitops/apps/demo-app/deployment.yaml
 git add gitops/apps/demo-app/deployment.yaml
 git commit -m "fix: pin podinfo image tag"
 git push
+cd ../..
 ```
 
 <!-- @wait -->
