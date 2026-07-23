@@ -17,8 +17,32 @@ funcionando sem nenhuma configuração extra dentro de um pipeline GitOps real
   - `03-generate-default-networkpolicy.yaml` (generate) — gera NetworkPolicy por namespace
 - `gitops/argocd/application.yaml` — Application do ArgoCD usada na Parte 4
 - `gitops/apps/demo-app/` — manifests sincronizados pelo ArgoCD (fonte da verdade da demo)
-- `scripts/install-components.sh` — sobe cluster + Kyverno + ArgoCD + políticas
+- `tests/` — `kyverno-test.yaml` + fixtures: testa `disallow-latest-tag` sem cluster (shift-left, rodável em CI)
+- `scripts/install-components.sh` — sobe cluster + Kyverno + ArgoCD + Policy Reporter + políticas
 - `demo.md` — roteiro para [demosh](https://github.com/BuoyantIO/demosh)
+
+## Acesso ao ArgoCD UI
+
+```bash
+kubectl --context=k3d-tdc-kyverno -n argocd port-forward svc/argocd-server 8080:443
+# https://localhost:8080 (aceite o certificado self-signed)
+# usuário: admin
+# senha:
+kubectl --context=k3d-tdc-kyverno -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
+```
+
+## Policy Reporter (dashboard de compliance)
+
+```bash
+kubectl -n policy-reporter port-forward service/policy-reporter-ui 8082:8080
+# http://localhost:8082/
+```
+
+## Testando as políticas sem cluster
+
+```bash
+kyverno test tests/
+```
 
 ## Rodando
 
